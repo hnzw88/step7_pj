@@ -12,40 +12,36 @@
         </div>
     </div>
 
+    <div class="row">
+        <!-- 検索フォーム -->
+        <div class="col-sm">
+            <form id="js-form" method="GET" action="{{ route('product.index') }}">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">商品名</label>
+                    <!--キーワード検索-->
+                    <div class="col-sm-5">
+                        <input type="text" name="keyword" value="{{ $keyword ?? '' }}" id="search_keyword">
+                    </div>
+                    <div class="col-sm-auto">
+                        <button type="button" class="btn btn-primary " id="search_button">検索</button>
+                    </div>
+                </div>
+                <!--プルダウン検索-->
+                <div class="form-group row">
+                    <label class="col-sm-2">メーカー名</label>
+                    <div class="col-sm-3">
+                        <select name="company_name" class="form-control" value="">
+                            <option value="">未選択</option>
 
-<!-- 検索機能 -->
-<div class="row">
-<!-- 検索バー -->
-<div class="col-sm">
-    <form id="js-form" method="GET" action="{{url('/exeAjax') }}">
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label">商品名</label>
-            <!--キーワード-->
-            <div class="col-sm-5">
-                <input type="text" name="keyword" value="{{ $keyword ?? '' }}" id="search_keyword">
-            </div>
-            <div class="col-sm-auto">
-                <button type="button" class="btn btn-primary " id="search_button">検索</button>
-            </div>
+                            @foreach($companies as $company)
+                            <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </form>
         </div>
-         <!--プルダウンカテゴリ選択-->
-        <div class="form-group row">
-            <label class="col-sm-2">メーカー名</label>
-            <div class="col-sm-3">
-                <select name="company_name" class="form-control" value="">
-                    <option value="">未選択</option>
-
-                    @foreach($companies as $company)
-                    <option value="{{ $company->id }}">{{ $company->company_name }}</option>
-                    @endforeach
-
-                </select>
-            </div>
-        </div>
-    </form>
-</div>
-</div>
-<!-- 検索機能 -->
+    </div>
 
      <!-- フラッシュメッセージ -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">

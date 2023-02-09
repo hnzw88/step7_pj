@@ -19,4 +19,9 @@ class Product extends Model
         'created_at',
         'updated_at',
         ];
+
+        // Companiesテーブルと関連付ける
+    public function company(){
+        return $this->belongsTo('App\Models\Company');
+    }
 }

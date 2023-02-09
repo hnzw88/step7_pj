@@ -15,8 +15,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        //一覧表示
         $products = Product::select([
             'p.id',
             'p.product_name',
@@ -34,10 +35,11 @@ class ProductController extends Controller
         return view('index', compact('products'))
         -> with('page_id', request()-> page)
         -> with('i', (request()-> input('page', 1) - 1) * 5);
-
+        
 
         //検索機能
         $companies = Company::all();
+        return view('index', compact('companies'));
 
         //入力される値nameの定義
         $keyword = $request->input('keyword'); //商品名
@@ -46,18 +48,19 @@ class ProductController extends Controller
         //queryビルダ
         $query = Product::query();
 
-        //キーワード検索機能
+        //キーワード検索
         if (!empty($keyword)) {
             $query->where('product_name', 'LIKE', "%{$keyword}%");
         }
 
-        //プルダウン検索機能
+        //プルダウン検索
         if (isset($company_name)) {
             $query->where('company_id', $company_name);
         }
 
         $products = $query->get();
-        return view('products.index', ['companies' => $companies], compact('products', 'keyword', 'company_name'));
+
+        return view('index', ['companies' => $companies], compact('products', 'keyword', 'company_name'),);
     }
 
     /**
@@ -82,7 +85,7 @@ class ProductController extends Controller
     {
         $product = new Product();
 
-        $img_path = $request->file('image')->store('public/images/');
+        $img_path = $request->file('images')->store('storage/app/public/images/');
 
         //値の登録
         $product-> product_name = $request-> product_name;
@@ -94,7 +97,7 @@ class ProductController extends Controller
         //保存
         $product-> save();
 
-        return redirect()->route('products.index')
+        return redirect()->route('product.index')
         -> with('flash_message','商品を登録しました');
      }
 
@@ -148,7 +151,7 @@ class ProductController extends Controller
         //保存
         $product-> save();
 
-        return redirect()-> route('products.index')
+        return redirect()-> route('product.index')
         -> with('flash_message','商品を更新しました');
     }
 
@@ -161,7 +164,8 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product-> delete();
-        return redirect()-> route('products.index')
+        return redirect()-> route('product.index')
         -> with('flash_message',$product-> product_name.'を削除しました');
     }
+
 }
